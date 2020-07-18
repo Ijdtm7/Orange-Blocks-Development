@@ -1,0 +1,14 @@
+subtitles.hl2.enter=Entity entered portal
+subtitles.hl2.exit=Entity exited portal
+subtitles.hl2.fizzle=Portal closing
+subtitles.hl2.invalid=Portal failed to open
+subtitles.hl2.open=Portal opening
+subtitles.hl2.fire=Portal gun firing
+subtitles.hl2.reset=Portal gun resetting
+subtitles.hl2.active=Portal gun equipping
+
+item.portalgun.name=Portal Gun
+item.portal_core.name=Portal Core
+
+key.hl2.switch=Switch Portal Gun Type
+key.categories.portalgun=Portal Gun
