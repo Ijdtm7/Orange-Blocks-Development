@@ -30,7 +30,7 @@ public class ClientProxy extends CommonProxy {
         Main.eventHandlerClient = new EventHandlerClient();
         MinecraftForge.EVENT_BUS.register(Main.eventHandlerClient);
 
-        ClientRegistry.registerKeyBinding(Main.eventHandlerClient.keySwitch);
+        ClientRegistry.registerKeyBinding(Main.eventHandlerClient.keyReset);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPortal.class, new TileRendererPortal());
 

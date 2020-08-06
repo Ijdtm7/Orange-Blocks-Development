@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -32,7 +33,7 @@ public class EventHandlerClient
     public static final ResourceLocation txRFull = new ResourceLocation("hl2", "textures/overlay/rfull.png");
 
 
-    public KeyBinding keySwitch = new KeyBinding("key.hl2.switch", Keyboard.KEY_G, "key.categories.portalgun");
+    //public KeyBinding keySwitch = new KeyBinding("key.hl2.switch", Keyboard.KEY_G, "key.categories.portalgun");
     public KeyBinding keyReset = new KeyBinding("key.hl2.reset", Keyboard.KEY_R, "key.categories.portalgun");
 
     public boolean keySwitchDown = false;
@@ -52,6 +53,8 @@ public class EventHandlerClient
         ModelLoader.setCustomModelResourceLocation(Main.itemPortalGun, 0, new ModelResourceLocation("hl2:pg_blue", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Main.itemPortalGun, 1, new ModelResourceLocation("hl2:pg_orange", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Main.itemPortalCore, 0, new ModelResourceLocation("hl2:pg_core", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Main.itemMultiPortalGun, 0, new ModelResourceLocation("hl2:pg_blue", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Main.itemMultiPortalGun, 1, new ModelResourceLocation("hl2:pg_orange", "inventory"));
     }
 
     @SubscribeEvent
@@ -60,17 +63,17 @@ public class EventHandlerClient
         if(event.phase == TickEvent.Phase.END)
         {
             Minecraft mc = Minecraft.getMinecraft();
-            if(mc.player != null && (mc.player.getHeldItemMainhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemPortalGun))
+            if(mc.player != null && (mc.player.getHeldItemMainhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemMainhand().getItem() == Main.itemMultiPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemMultiPortalGun))
             {
-                if(!keySwitchDown && keySwitch.isKeyDown())
+                /*if(!keySwitchDown && keySwitch.isKeyDown())
                 {
                     Main.channel.sendToServer(new PacketSwapType(false, 0));
-                }
+                }*/
                 if(!keyResetDown && keyReset.isKeyDown())
                 {
                     Main.channel.sendToServer(new PacketSwapType(true, GuiScreen.isShiftKeyDown() ? 1 : 0));
                 }
-                keySwitchDown = keySwitch.isKeyDown();
+                //keySwitchDown = keySwitch.isKeyDown();
                 keyResetDown = keyReset.isKeyDown();
             }
         }
@@ -100,7 +103,7 @@ public class EventHandlerClient
         if(event.phase == TickEvent.Phase.END)
         {
             Minecraft mc = Minecraft.getMinecraft();
-            if(mc.currentScreen == null && !mc.gameSettings.hideGUI && mc.player != null && (mc.player.getHeldItemMainhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemPortalGun))
+            if(mc.currentScreen == null && !mc.gameSettings.hideGUI && mc.player != null && (mc.player.getHeldItemMainhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemPortalGun || mc.player.getHeldItemMainhand().getItem() == Main.itemMultiPortalGun || mc.player.getHeldItemOffhand().getItem() == Main.itemMultiPortalGun))
             {
                 //is holding a portal gun
 

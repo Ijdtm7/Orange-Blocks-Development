@@ -4,6 +4,7 @@ import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.common.block.BlockPortal;
 import agentij.orangeblocks.hl2.common.item.ItemPortalCore;
 import agentij.orangeblocks.hl2.common.item.ItemPortalGun;
+import agentij.orangeblocks.hl2.common.item.ItemPortalGunMulti;
 import agentij.orangeblocks.hl2.common.packet.PacketPortalStatus;
 import agentij.orangeblocks.hl2.common.portal.PortalInfo;
 import agentij.orangeblocks.hl2.common.world.PortalSavedData;
@@ -37,6 +38,9 @@ public class EventHandlerServer
 
         Main.itemPortalCore = new ItemPortalCore();
         event.getRegistry().register(Main.itemPortalCore);
+
+        Main.itemMultiPortalGun = new ItemPortalGunMulti();
+        event.getRegistry().register(Main.itemMultiPortalGun);
     }
 
     @SubscribeEvent

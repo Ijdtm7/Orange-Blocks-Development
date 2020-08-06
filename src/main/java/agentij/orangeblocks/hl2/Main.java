@@ -36,6 +36,7 @@ public class Main
 
     public static Item itemPortalGun;
     public static Item itemPortalCore;
+    public static Item itemMultiPortalGun;
 
     public static Block blockPortalGun;
 
