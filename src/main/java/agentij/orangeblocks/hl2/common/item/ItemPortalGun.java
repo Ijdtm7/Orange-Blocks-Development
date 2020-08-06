@@ -1,16 +1,19 @@
 package agentij.orangeblocks.hl2.common.item;
 
 import agentij.orangeblocks.hl2.common.entity.EntityPortalProjectile;
+import agentij.orangeblocks.hl2.util.NBTWRITE;
 import agentij.orangeblocks.hl2.util.handlers.SoundRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 public class ItemPortalGun extends Item
 {
+
     public ItemPortalGun()
     {
         setMaxStackSize(1);
@@ -32,4 +35,30 @@ public class ItemPortalGun extends Item
         }
         return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(handIn));
     }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (this.isInCreativeTab(tab))
+        {
+            for(int i =0; i < 2; ++i)
+            {
+                ItemStack stack = new ItemStack(this, 1, i);
+                if(i == 0)
+                {
+                    stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Blue Portal Gun").getResult());
+                } else {
+                    stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Orange Portal Gun").getResult());
+                }
+                items.add(stack);
+            }
+        }
+
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return super.getItemStackDisplayName(stack)+ (stack.getTagCompound()!=null ? ""+stack.getTagCompound().getString("name") : "");
+    }
+
+
 }

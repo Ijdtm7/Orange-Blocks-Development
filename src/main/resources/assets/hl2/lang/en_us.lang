@@ -7,8 +7,9 @@ subtitles.hl2.fire=Portal gun firing
 subtitles.hl2.reset=Portal gun resetting
 subtitles.hl2.active=Portal gun equipping
 
-item.portalgun.name=Portal Gun
+item.portalgun.name=
 item.portal_core.name=Portal Core
+item.portalgunmulti.name=Dual Portal Device
 
-key.hl2.switch=Switch Portal Gun Type
+key.hl2.reset=Reset Portals
 key.categories.portalgun=Portal Gun
