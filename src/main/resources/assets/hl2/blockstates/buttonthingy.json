@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "inventory" : {
+      "model" : "hl2:button"
+    },
+    "powered=false": { "model": "hl2:button" },
+    "powered=true": { "model": "hl2:button" }
+  }
+}
