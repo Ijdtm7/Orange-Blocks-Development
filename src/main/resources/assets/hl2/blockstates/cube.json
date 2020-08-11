@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "inventory" : {
+      "model" : "hl2:storage_cube"
+    },
+    "type=cube": {
+      "model": "hl2:storage_cube"
+    },
+    "type=portalonecube": {
+      "model": "hl2:onecube"
+    },
+    "type=companioncube": {
+      "model": "hl2:companioncube"
+    }
+  }
+}

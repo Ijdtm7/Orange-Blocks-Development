@@ -1,0 +1,6 @@
+{
+	"parent": "hl2:block/storage_cube_base",
+	"textures": {
+		"cube_texture": "hl2:blocks/portal_cube"
+	}
+}

@@ -25,6 +25,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public void registerItemRenderer(Item item, int meta, String path) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(path, "inventory"));
+    }
+
+    @Override
     public void preInit() {
         super.preInit();
         Main.eventHandlerClient = new EventHandlerClient();
