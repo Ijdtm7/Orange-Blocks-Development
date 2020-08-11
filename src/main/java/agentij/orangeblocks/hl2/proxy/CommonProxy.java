@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SuppressWarnings("deprecation")
 public class CommonProxy {
     public void registerItemRenderer(Item item, int meta) {}
-
+    public void registerItemRenderer(Item item, int meta, String path) {}
     public void preInit() {
         //thanks iChun!
         GameRegistry.registerTileEntity(TileEntityPortal.class, "hl2:tile_portal");

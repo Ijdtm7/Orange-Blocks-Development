@@ -5,6 +5,7 @@
 package agentij.orangeblocks.hl2.init;
 
 import agentij.orangeblocks.hl2.blocks.BlockButtonThingy;
+import agentij.orangeblocks.hl2.blocks.BlockStorageCube;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
@@ -15,4 +16,5 @@ public class BlockInit {
 
 
     public static final Block BUTTONTHING = new BlockButtonThingy("buttonthingy");
+    public static final Block STORAGECUBE = new BlockStorageCube("cube");
 }
