@@ -1,0 +1,6 @@
+{
+	"parent": "hl2:block/buttoncube",
+	"textures": {
+		"cubetexture": "hl2:blocks/storage_cube"
+	}
+}

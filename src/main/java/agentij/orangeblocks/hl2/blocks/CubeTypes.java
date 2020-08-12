@@ -2,7 +2,7 @@ package agentij.orangeblocks.hl2.blocks;
 
 import net.minecraft.block.BlockSand;
 import net.minecraft.util.IStringSerializable;
-
+@Deprecated
 public enum CubeTypes implements IStringSerializable {
     CUBE(0, "cube"),
     PORTALCUBE(1, "portalonecube"),

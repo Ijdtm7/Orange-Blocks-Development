@@ -1,14 +1,17 @@
 package agentij.orangeblocks.hl2.blocks;
 
 import agentij.orangeblocks.hl2.Main;
+import agentij.orangeblocks.hl2.blocks.itemblocks.ItemBlockCube;
 import agentij.orangeblocks.hl2.init.BlockInit;
 import agentij.orangeblocks.hl2.init.ItemInit;
 import agentij.orangeblocks.hl2.util.NBTWRITE;
 import agentij.orangeblocks.hl2.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,10 +23,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,18 +34,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 @SuppressWarnings("deprecation")
 public class BlockStorageCube extends Block implements IHasModel {
-    public static final PropertyEnum<CubeTypes> CUBES = PropertyEnum.<CubeTypes>create("type", CubeTypes.class);
+    public static final PropertyInteger CUBES = PropertyInteger.create("type", 0,2);
     public static boolean fallInstantly;
     public BlockStorageCube(String name) {
         super(Material.IRON);
         setCreativeTab(CreativeTabs.MISC);
         setUnlocalizedName(name);
         setRegistryName(name);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(CUBES,CubeTypes.CUBE));
+        setSoundType(SoundType.METAL);
+        setHardness(5F);
+        setResistance(10F);
+        setHarvestLevel("pickaxe", 0);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CUBES,0));
 
         BlockInit.BLOCKS.add(this);
-        ItemInit.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+        ItemInit.ITEMS.add(new ItemBlockCube(this).setRegistryName(this.getRegistryName()));
     }
+
 
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
@@ -51,13 +59,16 @@ public class BlockStorageCube extends Block implements IHasModel {
             ItemStack stack = new ItemStack(this, 1, i);
             if (i==0)
             {
-                //stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Portal 2 Storage Cube").getResult());
-                stack.setStackDisplayName("Portal 2 Storage Cube");
+                stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Portal 2 Storage Cube").getResult());
+                //stack.setStackDisplayName("Portal 2 Storage Cube");
+                //stack.setTranslatableName("Portal 2 Storage CUbe");
             } else if(i==1)
             {
-                stack.setStackDisplayName("Portal 1 Storage Cube");
+               // stack.setStackDisplayName("Portal 1 Storage Cube");
+                stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Portal 1 Storage Cube").getResult());
             }else{
-                stack.setStackDisplayName("Companion Cube");
+                //stack.setStackDisplayName("Companion Cube");
+                stack.setTagCompound(new NBTWRITE(new NBTTagCompound()).setString("name", "Companion Cube").getResult());
             }
             items.add(stack);
         }
@@ -72,13 +83,22 @@ public class BlockStorageCube extends Block implements IHasModel {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (placer instanceof EntityPlayer)
-        {
-            EntityPlayer player = (EntityPlayer)placer;
-            int meta = stack.getMetadata();
-            IBlockState state1=getStateFromMeta(meta);
-            worldIn.setBlockState(pos, state1);
-        }
+
+        int meta = stack.getMetadata();
+        IBlockState state1=getStateFromMeta(meta);
+        worldIn.setBlockState(pos, state1);
+
+    }
+
+    @Override
+    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockDestroyedByPlayer(worldIn, pos, state);
+    }
+
+
+    @Override
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+        super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     /**
@@ -177,12 +197,12 @@ public class BlockStorageCube extends Block implements IHasModel {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(CUBES, CubeTypes.byMetadata(meta));
+        return this.getDefaultState().withProperty(CUBES, meta);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((CubeTypes)state.getValue(CUBES)).getMetadata();
+        return state.getValue(CUBES);
     }
 
     @Override
@@ -204,4 +224,38 @@ public class BlockStorageCube extends Block implements IHasModel {
     }
 
 
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        int meta = getMetaFromState(state);
+        ItemStack stack = new ItemStack(BlockInit.STORAGECUBE, 1, meta);
+        stack.setItemDamage(meta);
+        return stack.getItem();
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return new ItemStack(BlockInit.STORAGECUBE, 1, this.getMetaFromState(world.getBlockState(pos)));
+    }
+
+
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return this.getMetaFromState(state);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (playerIn.isSneaking())
+        {
+            if (playerIn.inventory.addItemStackToInventory(new ItemStack(this, 1, this.getMetaFromState(worldIn.getBlockState(pos)))))
+            {
+                IBlockState state1 = Blocks.AIR.getDefaultState();
+                worldIn.setBlockState(pos, state1);
+            }
+        }
+
+        return true;
+    }
 }

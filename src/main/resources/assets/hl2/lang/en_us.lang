@@ -14,5 +14,8 @@ item.portalgunmulti.name=Dual Portal Device
 key.hl2.reset=Reset Portals
 key.categories.portalgun=Portal Gun
 
-tile.cube.name=
+tile.cube.name=Storage Cube
+tile.cube.0=Portal 2 Cube
+tile.cube.1=Portal 1 Cube
+tile.cube.2=Companion Cube
 tile.button.name=Heavy Duty Super-Colliding Super Button

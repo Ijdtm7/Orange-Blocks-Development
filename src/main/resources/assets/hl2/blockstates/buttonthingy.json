@@ -3,7 +3,17 @@
     "inventory" : {
       "model" : "hl2:button"
     },
-    "powered=false": { "model": "hl2:button" },
-    "powered=true": { "model": "hl2:button" }
+    "cube=false,cubetype=0,powered=false": { "model": "hl2:button" },
+    "cube=false,cubetype=0,powered=true": { "model": "hl2:button" },
+    "cube=false,cubetype=1,powered=false": { "model": "hl2:button" },
+    "cube=false,cubetype=1,powered=true": { "model": "hl2:button" },
+    "cube=false,cubetype=2,powered=false": { "model": "hl2:button" },
+    "cube=false,cubetype=2,powered=true": { "model": "hl2:button" },
+    "cube=true,cubetype=0,powered=false": { "model": "hl2:buttonstoragecube" },
+    "cube=true,cubetype=1,powered=false": { "model": "hl2:buttononecube" },
+    "cube=true,cubetype=2,powered=false": { "model": "hl2:companioncubebutton" },
+    "cube=true,cubetype=0,powered=true": { "model": "hl2:buttonstoragecube" },
+    "cube=true,cubetype=1,powered=true": { "model": "hl2:buttononecube" },
+    "cube=true,cubetype=2,powered=true": { "model": "hl2:companioncubebutton" }
   }
 }
