@@ -19,3 +19,6 @@ tile.cube.0=Portal 2 Cube
 tile.cube.1=Portal 1 Cube
 tile.cube.2=Companion Cube
 tile.buttonthingy.name=Heavy Duty Super-Colliding Super Button
+tile.cubedispenserportalone.name=Portal 1 Cube Vital Apparatus Vent
+
+hl2.message.errorcube=[Ijd LOCAL ERROR MESSAGING SYSTEM ENGAGED] It has been detected that there is not a block of air directly underneath the cube dispenser, so the cube is unable to be dispensed. Please clear the block before trying again.

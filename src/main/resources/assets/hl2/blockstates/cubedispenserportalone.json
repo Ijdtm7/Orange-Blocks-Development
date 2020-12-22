@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "inventory" : {
+      "model" : "hl2:cubedispenserportal1normalclosed"
+    },
+    "powered=false": {
+      "model": "hl2:cubedispenserportal1normalclosed"
+    },
+    "powered=true": {
+      "model": "hl2:cubedispenserportal1normalopen"
+    }
+  }
+}
