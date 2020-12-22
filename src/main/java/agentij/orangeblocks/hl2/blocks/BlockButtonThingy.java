@@ -15,6 +15,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -110,6 +111,7 @@ public class BlockButtonThingy extends BlockBase{
         boolean cube = state.getValue(CUBE);
         if (cube) return BOUNDING_BOXCUBE;
         return BOUNDING_BOX;
+
     }
 
     @Override
@@ -319,6 +321,27 @@ public class BlockButtonThingy extends BlockBase{
             {
                 this.updateState(worldIn, pos, state, i);
             }
+
+            if (entityIn instanceof EntityItem)
+            {
+                EntityItem item = (EntityItem)entityIn;
+                ItemStack stack = item.getItem();
+                Block block = Block.getBlockFromItem(stack.getItem());
+                if (block instanceof BlockStorageCube)
+                {
+                    int x= pos.getX();
+                    int y= pos.getY();
+                    int z= pos.getZ();
+                    BlockPos pos1 = new BlockPos(x,y+1,z);
+                    IBlockState state2 = block.getDefaultState();
+                    if (!state.getValue(CUBE))
+                    {
+                        int cubecurrenttype = state2.getValue(BlockStorageCube.CUBES);
+                        worldIn.setBlockState(pos,state.withProperty(CUBETYPE, cubecurrenttype).withProperty(CUBE, true).withProperty(POWERED, true));
+                        item.setDead();
+                    }
+                }
+            }
         }
     }
     protected void updateState(World worldIn, BlockPos pos, IBlockState state, int oldRedstoneStrength)
@@ -442,4 +465,7 @@ public class BlockButtonThingy extends BlockBase{
             worldIn.setBlockState(pos1, Blocks.AIR.getDefaultState());
         }
     }
+
+
+
 }
