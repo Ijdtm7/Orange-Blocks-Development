@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -425,4 +426,20 @@ public class BlockButtonThingy extends BlockBase{
     public TileEntity createTileEntity(World world, IBlockState state) {
         return super.createTileEntity(world, state);
     }*/
+
+    //addcubefalling
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        int x= pos.getX();
+        int y= pos.getY();
+        int z= pos.getZ();
+        BlockPos pos1 = new BlockPos(x,y+1,z);
+        IBlockState state1 = worldIn.getBlockState(pos1);
+        if (state1.getBlock() == BlockInit.STORAGECUBE && !state.getValue(CUBE))
+        {
+            int cubecurrenttype = state1.getValue(BlockStorageCube.CUBES);
+            worldIn.setBlockState(pos,state.withProperty(CUBETYPE, cubecurrenttype).withProperty(CUBE, true).withProperty(POWERED, true));
+            worldIn.setBlockState(pos1, Blocks.AIR.getDefaultState());
+        }
+    }
 }
