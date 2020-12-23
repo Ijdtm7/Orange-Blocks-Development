@@ -3,6 +3,7 @@ package agentij.orangeblocks.hl2.common.world;
 import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.common.packet.PacketPortalStatus;
 import agentij.orangeblocks.hl2.common.portal.PortalInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,23 +15,25 @@ import java.util.Map;
 public class PortalSavedData extends WorldSavedData
 {
     public static final String DATA_ID = "PortalGunSaveData";
+    public String uuid;
 
     public HashMap<Integer, HashMap<String, PortalInfo>> portalInfo = new HashMap<>();
 
-    public PortalSavedData(String identifier)
+    public PortalSavedData(String identifier, String UUID)
     {
         super(identifier);
+        uuid=UUID;
     }
 
-    public void set(World world, boolean orange, BlockPos pos)
+    public void set(World world, boolean orange, BlockPos pos, String uuid)
     {
         HashMap<String, PortalInfo> map = portalInfo.computeIfAbsent(world.provider.getDimension(), k -> new HashMap<>());
-        map.put(orange ? "orange" : "blue", new PortalInfo(orange, pos));
+        map.put(orange ? "orange" : "blue", new PortalInfo(orange, pos, uuid));
         markDirty();
-        Main.channel.sendToDimension(new PacketPortalStatus(map.containsKey("blue"), map.containsKey("orange")), world.provider.getDimension());
+        Main.channel.sendToDimension(new PacketPortalStatus(map.containsKey("blue"), map.containsKey("orange"), uuid), world.provider.getDimension());
     }
 
-    public void kill(World world, boolean orange)
+    public void kill(World world, boolean orange, String uuid)
     {
         HashMap<String, PortalInfo> map = portalInfo.get(world.provider.getDimension());
         if(map != null)
@@ -38,7 +41,7 @@ public class PortalSavedData extends WorldSavedData
             PortalInfo info = map.get(orange ? "orange" : "blue");
             if(info != null)
             {
-                info.kill(world);
+                info.kill(world, uuid);
                 map.remove(orange ? "orange" : "blue");
                 if(map.isEmpty())
                 {
@@ -46,7 +49,7 @@ public class PortalSavedData extends WorldSavedData
                 }
                 markDirty();
             }
-            Main.channel.sendToDimension(new PacketPortalStatus(map.containsKey("blue"), map.containsKey("orange")), world.provider.getDimension());
+            Main.channel.sendToDimension(new PacketPortalStatus(map.containsKey("blue"), map.containsKey("orange"), uuid), world.provider.getDimension());
         }
     }
 

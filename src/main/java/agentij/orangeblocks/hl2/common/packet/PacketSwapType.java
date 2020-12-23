@@ -7,22 +7,27 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import javax.swing.plaf.ButtonUI;
 
 public class PacketSwapType implements IMessage
 {
     public boolean reset;
     public int type;
+    public String uuid;
 
     public PacketSwapType()
     {}
 
-    public PacketSwapType(boolean reset, int type)
+    public PacketSwapType(boolean reset, int type, String uuid)
     {
         this.reset = reset;
         this.type = type;
+        this.uuid = uuid;
     }
 
     @Override
@@ -30,6 +35,7 @@ public class PacketSwapType implements IMessage
     {
         reset = buf.readBoolean();
         type = buf.readInt();
+        uuid= ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
@@ -37,7 +43,9 @@ public class PacketSwapType implements IMessage
     {
         buf.writeBoolean(reset);
         buf.writeInt(type);
+        ByteBufUtils.writeUTF8String(buf, uuid);
     }
+
 
     public static class Handler implements IMessageHandler<PacketSwapType, IMessage>
     {
@@ -60,8 +68,8 @@ public class PacketSwapType implements IMessage
             {
                 if(message.type == 0)
                 {
-                    Main.eventHandlerServer.getSaveData(player.world).kill(player.world, false);
-                    Main.eventHandlerServer.getSaveData(player.world).kill(player.world, true);
+                    Main.eventHandlerServer.getSaveData(player.world).kill(player.world, false,message.uuid );
+                    Main.eventHandlerServer.getSaveData(player.world).kill(player.world, true,message.uuid);
                 }
                 else
                 {
@@ -70,7 +78,7 @@ public class PacketSwapType implements IMessage
                         ItemStack is = player.getHeldItem(hand);
                         if(is.getItem() == Main.itemPortalGun)
                         {
-                            Main.eventHandlerServer.getSaveData(player.world).kill(player.world, is.getItemDamage() == 1);
+                            Main.eventHandlerServer.getSaveData(player.world).kill(player.world, is.getItemDamage() == 1,message.uuid);
                         }
                     }
                 }

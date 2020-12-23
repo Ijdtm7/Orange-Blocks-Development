@@ -5,18 +5,32 @@ import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PortalSystemCapability implements IPortalSystem {
+    boolean hasOrangePortal=false;
+    boolean hasBluePortal=false;
+
+
     @Override
     public boolean HasOrangePortal() {
-        return false;
+        return hasOrangePortal;
     }
 
     @Override
     public boolean hasBluePortal() {
-        return false;
+        return hasBluePortal;
     }
 
     @Override
     public String uuid(EntityPlayer player) {
         return UUIDTypeAdapter.fromUUID(player.getGameProfile().getId());
+    }
+
+    @Override
+    public void setHasOrangePortal(boolean orangePortal) {
+        hasOrangePortal=orangePortal;
+    }
+
+    @Override
+    public void setHasBluePortal(boolean bluePortal) {
+        hasBluePortal=bluePortal;
     }
 }

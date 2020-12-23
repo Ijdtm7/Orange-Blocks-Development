@@ -327,13 +327,15 @@ public class BlockButtonThingy extends BlockBase{
                 EntityItem item = (EntityItem)entityIn;
                 ItemStack stack = item.getItem();
                 Block block = Block.getBlockFromItem(stack.getItem());
+                int meta = stack.getItemDamage();
                 if (block instanceof BlockStorageCube)
                 {
+                    BlockStorageCube storageCube = (BlockStorageCube) block;
                     int x= pos.getX();
                     int y= pos.getY();
                     int z= pos.getZ();
                     BlockPos pos1 = new BlockPos(x,y+1,z);
-                    IBlockState state2 = block.getDefaultState();
+                    IBlockState state2 = storageCube.getStateFromMeta(meta);
                     if (!state.getValue(CUBE))
                     {
                         int cubecurrenttype = state2.getValue(BlockStorageCube.CUBES);
@@ -419,7 +421,7 @@ public class BlockButtonThingy extends BlockBase{
         Item item = stack.getItem();
         int meta = item.getDamage(stack);
         Block block = Block.getBlockFromItem(item);
-        if(!playerIn.isSneaking() && block instanceof BlockStorageCube)
+        if(!playerIn.isSneaking() && block instanceof BlockStorageCube && !state.getValue(CUBE))
         {
             worldIn.setBlockState(pos, state.withProperty(CUBE, true).withProperty(CUBETYPE, meta).withProperty(POWERED, true));
             stack.shrink(1);

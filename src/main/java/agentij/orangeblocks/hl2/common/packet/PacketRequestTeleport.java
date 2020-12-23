@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -14,25 +15,29 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketRequestTeleport implements IMessage
 {
     public BlockPos pos;
+    public String uuid;
 
     public PacketRequestTeleport()
     {}
 
-    public PacketRequestTeleport(BlockPos pos)
+    public PacketRequestTeleport(BlockPos pos, String UUId)
     {
         this.pos = pos;
+        this.uuid= UUId;
     }
 
     @Override
     public void fromBytes(ByteBuf buf)
     {
         pos = BlockPos.fromLong(buf.readLong());
+        uuid = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf)
     {
         buf.writeLong(pos.toLong());
+        ByteBufUtils.writeUTF8String(buf, uuid);
     }
 
     public static class Handler implements IMessageHandler<PacketRequestTeleport, IMessage>

@@ -13,27 +13,36 @@ public class PortalInfo
 {
     public boolean isOrange;
     public BlockPos pos;
+    public String uuid;
 
-    public PortalInfo(boolean o, BlockPos poss)
+    public PortalInfo(boolean o, BlockPos poss, String uuid)
     {
         isOrange = o;
         pos = poss;
+        this.uuid = uuid;
     }
 
-    public void kill(World world)
+    public void kill(World world, String uuid)
     {
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileEntityPortal)
         {
             TileEntityPortal portal = (TileEntityPortal)te;
+            if (portal.uuid.equals(uuid))
+            {
+                world.setBlockToAir(pos);
+            }
 
-            world.setBlockToAir(pos);
             if(portal.face.getAxis() != EnumFacing.Axis.Y)
             {
                 BlockPos offset = portal.top ? pos.down() : pos.up();
                 if(world.getTileEntity(offset) instanceof TileEntityPortal)
                 {
-                    world.setBlockToAir(offset);
+                    if (portal.uuid.equals(uuid))
+                    {
+                        world.setBlockToAir(offset);
+                    }
+
                 }
             }
 
@@ -50,11 +59,12 @@ public class PortalInfo
         NBTTagCompound tag = new NBTTagCompound();
         tag.setBoolean("orange", isOrange);
         tag.setLong("pos", pos.toLong());
+        tag.setString("uuid", uuid);
         return tag;
     }
 
     public static PortalInfo createFromNBT(NBTTagCompound tag)
     {
-        return new PortalInfo(tag.getBoolean("orange"), BlockPos.fromLong(tag.getLong("pos")));
+        return new PortalInfo(tag.getBoolean("orange"), BlockPos.fromLong(tag.getLong("pos")), tag.getString("uuid"));
     }
 }

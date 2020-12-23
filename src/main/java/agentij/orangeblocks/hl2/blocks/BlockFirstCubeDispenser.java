@@ -315,16 +315,20 @@ public class BlockFirstCubeDispenser extends BlockBase {
                 String texttranslated = new TextComponentTranslation("hl2.message.errorcube").getUnformattedComponentText();
                 BlockPos cubePos = new BlockPos(x, y - 1, z);
                 IBlockState state1 = worldIn.getBlockState(cubePos);
-                if (state1.getBlock() == Blocks.AIR) {
+                Block belowBlock = state1.getBlock();
+                Material material = state1.getMaterial();
+                if (belowBlock == Blocks.AIR || belowBlock == Blocks.FIRE || material == Material.AIR || material==Material.WATER || material == Material.LAVA) {
+                    worldIn.setBlockState(pos, state.withProperty(POWERED, true));
                     IBlockState portalState = BlockInit.STORAGECUBE.getDefaultState().withProperty(BlockStorageCube.CUBES, 1);
                    worldIn.setBlockState(cubePos, portalState);
+                   return;
                 } else {
                     Main.logger.info("[ERROR] Unable to dispense cube as there is an object obstructing it below");
-                    //List<EntityPlayer> nearbyplayers = worldIn.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(cubePos).grow(20));
-                    // for (EntityPlayer player : nearbyplayers) {
-                    //    player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + texttranslated), false);
-                    //  }
-                    //worldIn.setBlockState(pos, this.getDefaultState());
+                    List<EntityPlayer> nearbyplayers = worldIn.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(cubePos).grow(20));
+                    for (EntityPlayer player : nearbyplayers) {
+                        player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + texttranslated), false);
+                      }
+                    worldIn.setBlockState(pos, this.getDefaultState());
                 }
             }else{
                 worldIn.setBlockState(pos, state.withProperty(POWERED,false));

@@ -4,9 +4,11 @@ import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.common.block.BlockPortal;
 import agentij.orangeblocks.hl2.common.tileentity.TileEntityPortal;
 import agentij.orangeblocks.hl2.util.handlers.SoundRegistry;
+import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -27,6 +29,8 @@ public class EntityPortalProjectile extends Entity
 {
     private static final DataParameter<Boolean> ORANGE = EntityDataManager.createKey(EntityPortalProjectile.class, DataSerializers.BOOLEAN);
     public int age = 0;
+    EntityPlayer player;
+    public String uuid;
 
     public EntityPortalProjectile(World worldIn)
     {
@@ -35,9 +39,12 @@ public class EntityPortalProjectile extends Entity
         setEntityInvulnerable(true);
     }
 
-    public EntityPortalProjectile(World world, Entity entity, boolean isOrange)
+    public EntityPortalProjectile(World world, EntityPlayer entity, boolean isOrange)
     {
+
         this(world);
+        this.player = entity;
+        this.uuid= UUIDTypeAdapter.fromUUID(entity.getGameProfile().getId());
         this.dataManager.set(ORANGE, isOrange);
         shoot(entity, 4.999F);
         setLocationAndAngles(entity.posX, entity.posY + entity.getEyeHeight() - (width / 2F), entity.posZ, entity.rotationYaw, entity.rotationPitch);
@@ -307,13 +314,13 @@ public class EntityPortalProjectile extends Entity
             BlockPos pos = rayTraceResult.getBlockPos().offset(rayTraceResult.sideHit);
             if(BlockPortal.canPlace(world, pos, rayTraceResult.sideHit, isOrange()))
             {
-                Main.eventHandlerServer.getSaveData(world).kill(world, isOrange());
+                Main.eventHandlerServer.getSaveData(world).kill(world, isOrange(), uuid);
 
                 world.setBlockState(pos, Main.blockPortalGun.getDefaultState());
                 TileEntity te = world.getTileEntity(pos);
                 if(te instanceof TileEntityPortal)
                 {
-                    ((TileEntityPortal)te).setup(rayTraceResult.sideHit.getAxis() != EnumFacing.Axis.Y, isOrange(), rayTraceResult.sideHit);
+                    ((TileEntityPortal)te).setup(rayTraceResult.sideHit.getAxis() != EnumFacing.Axis.Y, isOrange(), rayTraceResult.sideHit, player);
                 }
                 if(rayTraceResult.sideHit.getAxis() != EnumFacing.Axis.Y)
                 {
@@ -321,10 +328,10 @@ public class EntityPortalProjectile extends Entity
                     te = world.getTileEntity(pos.down());
                     if(te instanceof TileEntityPortal)
                     {
-                        ((TileEntityPortal)te).setup(false, isOrange(), rayTraceResult.sideHit);
+                        ((TileEntityPortal)te).setup(false, isOrange(), rayTraceResult.sideHit, player);
                     }
                 }
-                Main.eventHandlerServer.getSaveData(world).set(world, isOrange(), rayTraceResult.sideHit.getAxis() != EnumFacing.Axis.Y ? pos.down() : pos);
+                Main.eventHandlerServer.getSaveData(world).set(world, isOrange(), rayTraceResult.sideHit.getAxis() != EnumFacing.Axis.Y ? pos.down() : pos, uuid);
 
                 world.playSound(null, this.posX, this.posY + (this.height / 2F), this.posZ, isOrange() ? SoundRegistry.openred : SoundRegistry.openblue, SoundCategory.BLOCKS, 0.3F, 1.0F);
             }

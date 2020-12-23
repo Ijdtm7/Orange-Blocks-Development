@@ -5,6 +5,7 @@ import agentij.orangeblocks.hl2.common.packet.PacketEntityLocation;
 import agentij.orangeblocks.hl2.common.packet.PacketRequestTeleport;
 import agentij.orangeblocks.hl2.common.portal.PortalInfo;
 import agentij.orangeblocks.hl2.util.handlers.SoundRegistry;
+import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +31,8 @@ public class TileEntityPortal extends TileEntity implements ITickable
     public boolean top;
     public boolean orange;
     public EnumFacing face;
+    public EntityPlayer player;
+    public String uuid;
 
     public TileEntityPortal()
     {
@@ -102,7 +105,7 @@ public class TileEntityPortal extends TileEntity implements ITickable
         if(Main.eventHandlerClient.teleportCooldown <= 0 && player == Minecraft.getMinecraft().player)
         {
             Main.eventHandlerClient.teleportCooldown = 3;
-            Main.channel.sendToServer(new PacketRequestTeleport(pos));
+            Main.channel.sendToServer(new PacketRequestTeleport(pos, uuid));
         }
     }
 
@@ -206,13 +209,14 @@ public class TileEntityPortal extends TileEntity implements ITickable
         this.readFromNBT(pkt.getNbtCompound());
     }
 
-    public void setup(boolean top, boolean orange, EnumFacing face)
+    public void setup(boolean top, boolean orange, EnumFacing face, EntityPlayer player)
     {
         this.setup = true;
-
+        this.player = player;
         this.top = top;
         this.orange = orange;
         this.face = face;
+        this.uuid = UUIDTypeAdapter.fromUUID(this.player.getGameProfile().getId());
     }
 
     @Override
@@ -223,6 +227,7 @@ public class TileEntityPortal extends TileEntity implements ITickable
         tag.setBoolean("top", top);
         tag.setBoolean("orange", orange);
         tag.setInteger("face", face.getIndex());
+        tag.setString("uuid", uuid);
         return tag;
     }
 
@@ -234,5 +239,6 @@ public class TileEntityPortal extends TileEntity implements ITickable
         top = tag.getBoolean("top");
         orange = tag.getBoolean("orange");
         face = EnumFacing.getFront(tag.getInteger("face"));
+        uuid = tag.getString("uuid");
     }
 }

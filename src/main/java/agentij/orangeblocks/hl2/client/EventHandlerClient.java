@@ -7,6 +7,7 @@ package agentij.orangeblocks.hl2.client;
 import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.client.portal.PortalStatus;
 import agentij.orangeblocks.hl2.common.packet.PacketSwapType;
+import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -71,7 +72,8 @@ public class EventHandlerClient
                 }*/
                 if(!keyResetDown && keyReset.isKeyDown())
                 {
-                    Main.channel.sendToServer(new PacketSwapType(true, GuiScreen.isShiftKeyDown() ? 1 : 0));
+                    String uuid = UUIDTypeAdapter.fromUUID(mc.player.getGameProfile().getId());
+                    Main.channel.sendToServer(new PacketSwapType(true, GuiScreen.isShiftKeyDown() ? 1 : 0, uuid ));
                 }
                 //keySwitchDown = keySwitch.isKeyDown();
                 keyResetDown = keyReset.isKeyDown();

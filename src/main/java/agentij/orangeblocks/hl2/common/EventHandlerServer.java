@@ -9,6 +9,7 @@ import agentij.orangeblocks.hl2.common.packet.PacketPortalStatus;
 import agentij.orangeblocks.hl2.common.portal.PortalInfo;
 import agentij.orangeblocks.hl2.common.world.PortalSavedData;
 import agentij.orangeblocks.hl2.util.handlers.SoundRegistry;
+import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 
 public class EventHandlerServer
 {
+    public String uuid;
     @SubscribeEvent
     public void onRegisterBlock(RegistryEvent.Register<Block> event)
     {
@@ -69,9 +71,11 @@ public class EventHandlerServer
 
     public void updatePlayerDimensionStatus(EntityPlayer player)
     {
+        String uuid1 = UUIDTypeAdapter.fromUUID(player.getGameProfile().getId());
+        uuid= uuid1;
         PortalSavedData data = getSaveData(player.getEntityWorld());
         HashMap<String, PortalInfo> map = data.portalInfo.get(player.getEntityWorld().provider.getDimension());
-        Main.channel.sendTo(new PacketPortalStatus(map != null && map.containsKey("blue"), map != null && map.containsKey("orange")), (EntityPlayerMP)player);
+        Main.channel.sendTo(new PacketPortalStatus(map != null && map.containsKey("blue"), map != null && map.containsKey("orange"), uuid1), (EntityPlayerMP)player);
     }
 
     public PortalSavedData getSaveData(World world)
@@ -79,7 +83,7 @@ public class EventHandlerServer
         PortalSavedData data = (PortalSavedData)world.loadData(PortalSavedData.class, PortalSavedData.DATA_ID);
         if(data == null)
         {
-            data = new PortalSavedData(PortalSavedData.DATA_ID);
+            data = new PortalSavedData(PortalSavedData.DATA_ID,uuid);
             world.setData(PortalSavedData.DATA_ID, data);
             data.markDirty();
         }

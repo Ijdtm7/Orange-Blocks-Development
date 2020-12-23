@@ -7,6 +7,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -82,7 +83,8 @@ public class BlockPortal extends Block implements ITileEntityProvider
                 {
                     if(!world.isSideSolid(pos.offset(portal.face, -1), portal.face))
                     {
-                        Main.eventHandlerServer.getSaveData(world).kill(world, portal.orange);
+                        String uuid = portal.uuid;
+                        Main.eventHandlerServer.getSaveData(world).kill(world, portal.orange, uuid);
                         world.setBlockToAir(pos);
                     }
                 }
@@ -91,7 +93,8 @@ public class BlockPortal extends Block implements ITileEntityProvider
                     BlockPos other = portal.top ? pos.down() : pos.up();
                     if(!(world.isSideSolid(pos.offset(portal.face, -1), portal.face) && world.isSideSolid(other.offset(portal.face, -1), portal.face)) || world.getBlockState(other).getBlock() != this)
                     {
-                        Main.eventHandlerServer.getSaveData(world).kill(world, portal.orange);
+                        String uuid = portal.uuid;
+                        Main.eventHandlerServer.getSaveData(world).kill(world, portal.orange, uuid);
                         world.setBlockToAir(pos);
                     }
                 }

@@ -9,4 +9,7 @@ public interface IPortalSystem {
     boolean hasBluePortal();
 
     String uuid(EntityPlayer player);
+
+    void setHasOrangePortal(boolean orangePortal);
+    void setHasBluePortal(boolean bluePortal);
 }

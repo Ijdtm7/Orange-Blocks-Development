@@ -3,6 +3,7 @@ package agentij.orangeblocks.hl2.common.packet;
 import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.client.portal.PortalStatus;
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -11,14 +12,16 @@ public class PacketPortalStatus implements IMessage
 {
     public boolean blue;
     public boolean orange;
+    public String uuid;
 
     public PacketPortalStatus()
     {}
 
-    public PacketPortalStatus(boolean blue, boolean orange)
+    public PacketPortalStatus(boolean blue, boolean orange, String uuid)
     {
         this.blue = blue;
         this.orange = orange;
+        this.uuid=uuid;
     }
 
     @Override
@@ -26,6 +29,7 @@ public class PacketPortalStatus implements IMessage
     {
         blue = buf.readBoolean();
         orange = buf.readBoolean();
+        uuid = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
@@ -33,6 +37,7 @@ public class PacketPortalStatus implements IMessage
     {
         buf.writeBoolean(blue);
         buf.writeBoolean(orange);
+        ByteBufUtils.writeUTF8String(buf, uuid);
     }
 
     public static class Handler implements IMessageHandler<PacketPortalStatus, IMessage>
