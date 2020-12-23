@@ -22,7 +22,7 @@ public class PortalInfo
         this.uuid = uuid;
     }
 
-    public void kill(World world, String uuid)
+    public TileEntity kill(World world, String uuid)
     {
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileEntityPortal)
@@ -52,6 +52,7 @@ public class PortalInfo
         {
             world.setBlockToAir(pos);
         }
+        return te;
     }
 
     public NBTTagCompound toNBT()

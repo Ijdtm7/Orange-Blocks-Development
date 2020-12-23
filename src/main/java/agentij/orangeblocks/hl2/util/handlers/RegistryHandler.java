@@ -4,6 +4,7 @@
 
 package agentij.orangeblocks.hl2.util.handlers;
 
+import agentij.orangeblocks.hl2.commands.CommandKillAllPortals;
 import agentij.orangeblocks.hl2.init.BlockInit;
 import agentij.orangeblocks.hl2.init.EntityInit;
 import agentij.orangeblocks.hl2.init.ItemInit;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
@@ -71,5 +73,11 @@ public class RegistryHandler {
     public static void postInitRegistries(FMLPostInitializationEvent event)
     {
 
+    }
+
+
+    public static void serverRegistries(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new CommandKillAllPortals());
     }
 }

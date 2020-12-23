@@ -3,8 +3,10 @@ package agentij.orangeblocks.hl2.common.world;
 import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.common.packet.PacketPortalStatus;
 import agentij.orangeblocks.hl2.common.portal.PortalInfo;
+import agentij.orangeblocks.hl2.common.tileentity.TileEntityPortal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
@@ -27,6 +29,7 @@ public class PortalSavedData extends WorldSavedData
 
     public void set(World world, boolean orange, BlockPos pos, String uuid)
     {
+
         HashMap<String, PortalInfo> map = portalInfo.computeIfAbsent(world.provider.getDimension(), k -> new HashMap<>());
         map.put(orange ? "orange" : "blue", new PortalInfo(orange, pos, uuid));
         markDirty();
@@ -41,13 +44,21 @@ public class PortalSavedData extends WorldSavedData
             PortalInfo info = map.get(orange ? "orange" : "blue");
             if(info != null)
             {
-                info.kill(world, uuid);
-                map.remove(orange ? "orange" : "blue");
-                if(map.isEmpty())
+                TileEntity te = info.kill(world, uuid);
+                if (te instanceof TileEntityPortal)
                 {
-                    portalInfo.remove(world.provider.getDimension());
+                    if (((TileEntityPortal) te).uuid.equals(uuid))
+                    {
+                        map.remove(orange ? "orange" : "blue");
+                        if(map.isEmpty())
+                        {
+                            portalInfo.remove(world.provider.getDimension());
+                        }
+                        markDirty();
+                    }
+
                 }
-                markDirty();
+
             }
             Main.channel.sendToDimension(new PacketPortalStatus(map.containsKey("blue"), map.containsKey("orange"), uuid), world.provider.getDimension());
         }

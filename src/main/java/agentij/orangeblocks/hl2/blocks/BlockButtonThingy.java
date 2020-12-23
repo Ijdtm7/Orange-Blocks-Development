@@ -417,23 +417,27 @@ public class BlockButtonThingy extends BlockBase{
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = playerIn.getHeldItem(hand);
-        Item item = stack.getItem();
-        int meta = item.getDamage(stack);
-        Block block = Block.getBlockFromItem(item);
-        if(!playerIn.isSneaking() && block instanceof BlockStorageCube && !state.getValue(CUBE))
+        if (!worldIn.isRemote)
         {
-            worldIn.setBlockState(pos, state.withProperty(CUBE, true).withProperty(CUBETYPE, meta).withProperty(POWERED, true));
-            stack.shrink(1);
-        }
-        if (!playerIn.isSneaking() && state.getValue(CUBE))
-        {
-            if (!worldIn.isRemote)
+            ItemStack stack = playerIn.getHeldItem(hand);
+            Item item = stack.getItem();
+            int meta = item.getDamage(stack);
+            Block block = Block.getBlockFromItem(item);
+            if(!playerIn.isSneaking() && block instanceof BlockStorageCube && !state.getValue(CUBE))
             {
-                playerIn.inventory.addItemStackToInventory(new ItemStack(BlockInit.STORAGECUBE,1,state.getValue(CUBETYPE)));
-                worldIn.setBlockState(pos, state.withProperty(CUBE, false).withProperty(CUBETYPE, 0).withProperty(POWERED, false));
+                worldIn.setBlockState(pos, state.withProperty(CUBE, true).withProperty(CUBETYPE, meta).withProperty(POWERED, true));
+                stack.shrink(1);
+            }
+            if (!playerIn.isSneaking() && state.getValue(CUBE))
+            {
+                if (!worldIn.isRemote)
+                {
+                    playerIn.inventory.addItemStackToInventory(new ItemStack(BlockInit.STORAGECUBE,1,state.getValue(CUBETYPE)));
+                    worldIn.setBlockState(pos, state.withProperty(CUBE, false).withProperty(CUBETYPE, 0).withProperty(POWERED, false));
+                }
             }
         }
+
 
 
         return true;
