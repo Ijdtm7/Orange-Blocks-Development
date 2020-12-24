@@ -1,7 +1,9 @@
 package agentij.orangeblocks.hl2.common.block;
 
 import agentij.orangeblocks.hl2.Main;
+import agentij.orangeblocks.hl2.blocks.BlockDecorativeNonPortable;
 import agentij.orangeblocks.hl2.common.tileentity.TileEntityPortal;
+import agentij.orangeblocks.hl2.util.interfaces.IPortalabe;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -108,6 +110,43 @@ public class BlockPortal extends Block implements ITileEntityProvider
 
     public static boolean canPlace(World world, BlockPos pos, EnumFacing sideHit, boolean isOrange)
     {
+        Main.logger.info(pos.getX() + " " + pos.getY() + " "+ pos.getZ());
+        BlockPos blockPos = new BlockPos(pos);
+        int index = sideHit.getIndex();
+        Main.logger.info(index);
+        if (index == 0)
+        {
+          blockPos=blockPos.up();
+        }else if (index==1)
+        {
+         blockPos=blockPos.down();
+        }else if (index==2)
+        {
+         blockPos=blockPos.south();
+        }else if (index==3)
+        {
+           blockPos=blockPos.north();
+        }else if (index==4)
+        {
+          blockPos=  blockPos.east();
+        }else if (index ==5)
+        {
+           blockPos= blockPos.west();
+        }
+        Main.logger.info(blockPos.getX() + " " + blockPos.getY() + " "+ blockPos.getZ());
+        Block block = world.getBlockState(blockPos).getBlock();
+        Main.logger.info(block.getUnlocalizedName());
+        if (block instanceof IPortalabe)
+        {
+            Main.logger.info("detected");
+            if (((IPortalabe) block).portalable())
+            {
+
+            }else{
+                return false;
+            }
+
+        }
         if(world.getBlockState(pos).getBlock().isReplaceable(world, pos) || world.getTileEntity(pos) instanceof TileEntityPortal && ((TileEntityPortal)world.getTileEntity(pos)).setup && ((TileEntityPortal)world.getTileEntity(pos)).orange == isOrange)
         {
             if(sideHit.getAxis() == EnumFacing.Axis.Y) //1 block portal

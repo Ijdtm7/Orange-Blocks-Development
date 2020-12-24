@@ -48,7 +48,7 @@ public class BlockFirstCubeDispenser extends BlockBase {
 
 
         //temporaily send up Redstone tab in Creative until I get around to making a dedicated portal tab, probably will today
-        super(name, Material.IRON, CreativeTabs.REDSTONE);
+        super(name, Material.IRON, Main.portalBasicTab);
 
 
         setSoundType(SoundType.METAL);

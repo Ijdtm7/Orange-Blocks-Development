@@ -6,10 +6,12 @@ package agentij.orangeblocks.hl2;
 
 import agentij.orangeblocks.hl2.client.EventHandlerClient;
 import agentij.orangeblocks.hl2.common.EventHandlerServer;
+import agentij.orangeblocks.hl2.creativetabs.PortalBasicTab;
 import agentij.orangeblocks.hl2.proxy.CommonProxy;
 import agentij.orangeblocks.hl2.util.QuickRef;
 import agentij.orangeblocks.hl2.util.handlers.RegistryHandler;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -42,6 +44,8 @@ public class Main
     public static Block blockPortalGun;
 
     public static SimpleNetworkWrapper channel;
+
+    public static final CreativeTabs portalBasicTab = new PortalBasicTab();
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event)

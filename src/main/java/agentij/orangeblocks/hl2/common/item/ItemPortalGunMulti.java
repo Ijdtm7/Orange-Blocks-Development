@@ -25,7 +25,7 @@ public class ItemPortalGunMulti extends Item {
         setMaxDamage(0);
         setRegistryName("portalgunmulti");
         setUnlocalizedName("portalgunmulti");
-        setCreativeTab(CreativeTabs.TOOLS);
+        setCreativeTab(Main.portalBasicTab);
     }
 
 

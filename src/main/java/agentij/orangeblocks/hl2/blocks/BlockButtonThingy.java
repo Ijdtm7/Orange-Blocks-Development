@@ -1,5 +1,6 @@
 package agentij.orangeblocks.hl2.blocks;
 
+import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.init.BlockInit;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -179,7 +180,7 @@ public class BlockButtonThingy extends BlockBase{
         return resultClosest == null ? null : new RayTraceResult(RayTraceResult.Type.BLOCK, resultClosest.hitVec.addVector(pos.getX(), pos.getY(), pos.getZ()), resultClosest.sideHit, pos);
     }
     public BlockButtonThingy(String name) {
-        super(name, Material.IRON, CreativeTabs.REDSTONE);
+        super(name, Material.IRON, Main.portalBasicTab);
         setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(POWERED, Boolean.FALSE).withProperty(CUBE, false).withProperty(CUBETYPE, 0));
     }

@@ -38,7 +38,7 @@ public class BlockStorageCube extends Block implements IHasModel {
     public static boolean fallInstantly;
     public BlockStorageCube(String name) {
         super(Material.IRON);
-        setCreativeTab(CreativeTabs.MISC);
+        setCreativeTab(Main.portalBasicTab);
         setUnlocalizedName(name);
         setRegistryName(name);
         setSoundType(SoundType.METAL);

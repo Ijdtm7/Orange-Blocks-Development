@@ -1,5 +1,6 @@
 package agentij.orangeblocks.hl2.common.item;
 
+import agentij.orangeblocks.hl2.Main;
 import agentij.orangeblocks.hl2.common.entity.EntityPortalProjectile;
 import agentij.orangeblocks.hl2.util.NBTWRITE;
 import agentij.orangeblocks.hl2.util.handlers.SoundRegistry;
@@ -21,7 +22,7 @@ public class ItemPortalGun extends Item
         setMaxDamage(0);
         setRegistryName("portalgun");
         setUnlocalizedName("portalgun");
-        setCreativeTab(CreativeTabs.TOOLS);
+        setCreativeTab(Main.portalBasicTab);
     }
 
     @Override
